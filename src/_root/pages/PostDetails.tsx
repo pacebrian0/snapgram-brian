@@ -4,7 +4,6 @@ import { useUserContext } from '@/context/AuthContext';
 import { useGetPostById } from '@/lib/react-query/queriesAndMutations'
 import { formatDateString } from '@/lib/utils';
 import { Loader } from 'lucide-react';
-import React from 'react'
 import { Link, useParams } from 'react-router-dom';
 
 const PostDetails = () => {
@@ -32,7 +31,7 @@ const PostDetails = () => {
 
                     <div className='flex-center gap-2 text-light-3'>
                       <p className='subtle-semibold lg:small-regular'>
-                        {formatDateString(post?.$createdAt)}
+                        {formatDateString(post?.$createdAt??"")}
                       </p>
                       -
                       <p className='subtle-semibold lg:small-regular'>
@@ -65,7 +64,7 @@ const PostDetails = () => {
                     </ul>
                 </div>
                 <div className='w-full'>
-                  <PostStats post={post || {}} userId={user.id}/>
+                  <PostStats post={post} userId={user.id}/>
                   </div>
             </div>
           </div>

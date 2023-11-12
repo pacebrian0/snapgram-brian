@@ -1,7 +1,6 @@
 import PostForm from '@/components/forms/PostForm'
 import { useGetPostById } from '@/lib/react-query/queriesAndMutations';
 import { Loader } from 'lucide-react';
-import React from 'react'
 import { useParams } from 'react-router-dom'
 
 const EditPost = () => {

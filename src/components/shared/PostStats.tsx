@@ -4,7 +4,7 @@ import { Models } from 'appwrite'
 import React, { useEffect, useState } from 'react'
 import Loader from './Loader';
 type PostStatsProps = {
-    post?: Models.Document;
+    post?: Models.Document | undefined;
     userId: string;
 }
 
