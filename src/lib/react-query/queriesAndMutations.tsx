@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getPostById, getRecentPosts, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost } from "../appwrite/api";
+import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteSavedPosts, getPostById, getRecentPosts, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost } from "../appwrite/api";
 import { INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
 
@@ -160,11 +160,10 @@ export const useGetPosts = () => {
             queryFn: getInfinitePosts,
             initialPageParam: 0,
             getNextPageParam: (lastPage) => {
-                if(lastPage && lastPage?.documents.length === 0) return undefined;
-
-                const lastId = lastPage?.documents[lastPage?.documents.length -1].$id;
-                return Number(lastId);
-            }
+                // Use the last document's cursor or any logic to determine the next page
+                const lastCursor = lastPage && lastPage.documents[lastPage.documents.length - 1].$cursor;
+                return lastCursor ? Number(lastCursor) : undefined;
+              }
 
         }
     )
@@ -177,6 +176,23 @@ export const useSearchPost = (searchTerm: string) =>
             queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerm],
             queryFn: () => searchPosts(searchTerm),
             enabled: !!searchTerm
+        }
+    )
+}
+
+export const useGetSavedPosts = () => {
+    return useInfiniteQuery(
+        {
+            queryKey: [QUERY_KEYS.GET_INFINITE_SAVED_POSTS],
+            queryFn:getInfiniteSavedPosts,
+            initialPageParam: 0,
+            getNextPageParam: (lastPage) => {
+                if(lastPage && lastPage?.documents.length === 0) return undefined;
+
+                const lastId = lastPage?.documents[lastPage?.documents.length -1].$id;
+                return Number(lastId);
+            }
+
         }
     )
 }
