@@ -314,9 +314,9 @@ export async function deletePost(postId: string, imageId: string) {
 
 }
 
-export async function getInfinitePosts({pageParam=0}: {pageParam:number}) {
+export async function getInfinitePosts({pageParam}: {pageParam:string}) {
     const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(2)]
-    if (pageParam) {
+    if (pageParam && pageParam !=='') {
         queries.push(Query.cursorAfter(pageParam.toString()))
     }
     try {
@@ -346,7 +346,7 @@ export async function searchPosts(searchTerm: string) {
     }
 }
 
-export async function getInfiniteSavedPosts({pageParam=0}: {pageParam:number  }) {
+export async function getInfiniteSavedPosts({pageParam}: {pageParam:string  }) {
     try {
         // if(!userId || userId==="") return;
         // const user = await databases.getDocument(
@@ -358,8 +358,8 @@ export async function getInfiniteSavedPosts({pageParam=0}: {pageParam:number  })
 
 
         const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(10)]
-        if (pageParam) {
-            queries.push(Query.cursorAfter(pageParam.toString()))
+        if (pageParam  && pageParam!=='') {
+            queries.push(Query.cursorAfter(pageParam))
         }
         try {
             const posts = await databases.listDocuments(

@@ -158,11 +158,13 @@ export const useGetPosts = () => {
         {
             queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
             queryFn: getInfinitePosts,
-            initialPageParam: 0,
+            initialPageParam: '',
             getNextPageParam: (lastPage) => {
                 // Use the last document's cursor or any logic to determine the next page
-                const lastCursor = lastPage && lastPage.documents[lastPage.documents.length - 1].$cursor;
-                return lastCursor ? Number(lastCursor) : undefined;
+                if(lastPage && lastPage?.documents.length === 0) return undefined;
+
+                const lastId = lastPage?.documents[lastPage?.documents.length -1].$id;
+                return lastId;
               }
 
         }
@@ -185,12 +187,14 @@ export const useGetSavedPosts = () => {
         {
             queryKey: [QUERY_KEYS.GET_INFINITE_SAVED_POSTS],
             queryFn:getInfiniteSavedPosts,
-            initialPageParam: 0,
-            getNextPageParam: (lastPage) => {
+            initialPageParam: '',
+            getNextPageParam: (lastPage,allPages) => {
+                console.log({lastPage,allPages})
                 if(lastPage && lastPage?.documents.length === 0) return undefined;
 
                 const lastId = lastPage?.documents[lastPage?.documents.length -1].$id;
-                return Number(lastId);
+                return lastId;
+
             }
 
         }

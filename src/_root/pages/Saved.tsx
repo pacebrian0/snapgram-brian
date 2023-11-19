@@ -30,9 +30,9 @@ const Saved = () => {
     <div className="explore-container">
       <div className='flex flex-wrap gap-9 w-full max-w-5xl'>
         {
-          // shouldShowPosts ? (
-          //   <p className='text-light-4 mt-10 text-center w-full'>End of Posts</p>
-          // ) :
+          shouldShowPosts ? (
+            <p className='text-light-4 mt-10 text-center w-full'>End of Posts</p>
+          ) :
           posts?.pages.map((item, index) => (
             
             <GridPostList key={`page-${index}`} posts={item?.documents.filter((x)=>x.user.$id === user.id).map((x) => x.post)} />
@@ -40,11 +40,11 @@ const Saved = () => {
         }
 
       </div>
-      {/* {hasNextPage  && (
+      {hasNextPage  && (
         <div ref={ref} className='mt-10'>
           <Loader/>
           </div>
-      )} */}
+      )}
     </div>
   )
 }
