@@ -15,7 +15,7 @@ module.exports = {
       padding: '2rem',
       screens: {
         '2xl': '1400px',
-      
+
       },
     },
     extend: {
@@ -36,7 +36,7 @@ module.exports = {
       },
       screens: {
         'xs': '480px',
-      
+
       },
       width: {
         '420': '420px',
@@ -59,6 +59,19 @@ module.exports = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'text': 'text 2s ease infinite',
+      },
+      'keyframes': {
+        'text': {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          }
+        },
       },
     },
   },

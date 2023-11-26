@@ -3,12 +3,12 @@ import Loader from '@/components/shared/Loader';
 import SearchResults from '@/components/shared/SearchResults';
 import { Input } from '@/components/ui/input'
 import useDebounce from '@/hooks/useDebounce';
-import { useGetPosts, useSearchPost } from '@/lib/react-query/queriesAndMutations';
+import { useGetInfinitePosts, useSearchPost } from '@/lib/react-query/queriesAndMutations';
 import { useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer';
 
 const Explore = () => {
-  const {data:posts, fetchNextPage, hasNextPage} = useGetPosts();
+  const {data:posts, fetchNextPage, hasNextPage} = useGetInfinitePosts();
   const [searchValue, setSearchValue] = useState('');
   const debouncedValue = useDebounce(searchValue, 500);
   const {data: searchedPosts, isFetching: isSearchFetching} = useSearchPost(debouncedValue);

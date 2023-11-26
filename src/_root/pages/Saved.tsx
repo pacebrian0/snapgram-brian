@@ -1,7 +1,7 @@
 import GridPostList from "@/components/shared/GridPostList";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetSavedPosts } from "@/lib/react-query/queriesAndMutations"
-import { Loader } from "lucide-react";
+import Loader from "@/components/shared/Loader";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 

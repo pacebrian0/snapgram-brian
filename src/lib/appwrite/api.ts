@@ -376,3 +376,21 @@ export async function getInfiniteSavedPosts({pageParam}: {pageParam:string  }) {
         console.log(error);
     }
 }
+
+export async function getUserById(userId:string)
+{
+    try {
+        if(!userId || userId==="") return;
+
+        const user = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            userId
+            );
+        if (!user) throw Error;
+        return user;
+    } catch (error) {
+       console.log(error); 
+    }
+}
+
