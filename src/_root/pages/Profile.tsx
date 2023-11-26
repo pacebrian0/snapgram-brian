@@ -17,9 +17,10 @@ const Profile = () => {
     if (inView) fetchNextPage();
   }, [inView])
 
-  const isCurrentUser = user?.$id === user
-  console.log(user)
-  console.log(currUser)
+  const isCurrentUser = user?.$id === currUser?.$id;
+  // console.log(user)
+  // console.log(currUser)
+  // console.log({posts})
   //const shouldShowPosts = posts?.pages.every((x) => x?.documents.length !== 0)
 
   if (isUserPending || isCurrUserPending) return <Loader />
@@ -75,10 +76,13 @@ const Profile = () => {
                 !posts ? (
                   <p className='text-light-4 mt-10 text-center w-full'>End of Posts</p>
                 ) :
-                  posts.pages.map((item, index) => (
+                  posts.pages.map((item, index) => { 
+                    console.log({user,item})
 
-                    //<GridPostList key={`page-${index}`} posts={item?.documents.filter((x) => x.user.$id === user?.id).map((x) => x.post)} />
-                  ))
+                    return(
+                      
+                    <GridPostList key={`page-${index}`} posts={item?.documents.filter((x) => x.creator.$id === user?.$id).map((x) => x.post)} />
+                  )})
               }
 
             </div>

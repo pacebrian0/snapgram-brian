@@ -10,11 +10,16 @@ type GridPostListProps = {
 }
 
 const GridPostList = ({ posts, showUser = true, showStats = true }: GridPostListProps) => {
+    if(!posts) return;
     const { user } = useUserContext();
-    
+
     return (
         <ul className='grid-container'>
-            {posts?.map((post) => (
+            {posts?.map((post) => {
+                if(!post) return;
+                console.log({post});
+                
+                return(
                 
                 <li key={post.$id} className='relative min-w-80 h-80'>
                     <Link to={`/posts/${post.$id}`} className='grid-post_link'>
@@ -32,7 +37,9 @@ const GridPostList = ({ posts, showUser = true, showStats = true }: GridPostList
                     </div>
 
                 </li>
-            ))}
+            )}
+            
+            )}
 
         </ul>
     )
