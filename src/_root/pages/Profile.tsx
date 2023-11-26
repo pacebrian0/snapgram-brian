@@ -77,7 +77,7 @@ const Profile = () => {
                 ) :
                   posts.pages.map((item, index) => (
 
-                    <GridPostList key={`page-${index}`} posts={item?.documents.filter((x) => x.user.$id === user?.id).map((x) => x.post)} />
+                    //<GridPostList key={`page-${index}`} posts={item?.documents.filter((x) => x.user.$id === user?.id).map((x) => x.post)} />
                   ))
               }
 
