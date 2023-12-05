@@ -350,6 +350,24 @@ export async function getUserPosts(userId:string) {
     }
 }
 
+export async function getInfiniteUserPosts({pageParam, userId}: {pageParam:string, userId:string}) {
+    const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(2), Query.equal('creator', userId)]
+    if (pageParam && pageParam !=='') {
+        queries.push(Query.cursorAfter(pageParam.toString()))
+    }
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postCollectionId,
+            queries
+        )
+        if (!posts) throw Error;
+        return posts;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async function searchPosts(searchTerm: string) {
     try {
         const posts = await databases.listDocuments(
