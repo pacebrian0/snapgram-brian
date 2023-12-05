@@ -19,6 +19,7 @@ const Profile = () => {
 
   const isCurrentUser = user?.$id === currUser?.$id;
 
+  const numPosts = posts?.pages.length;
   if (isUserPending || isCurrUserPending) return <Loader />
   return (
     <div className="flex flex-col flex-1">
@@ -39,19 +40,19 @@ const Profile = () => {
       </div>
       <div className="flex flex-col">
         <div className='flex flex-row justify-center '>
-          <div className="mx-3 justify-center">
+          <div className="mx-3 justify-center text-center">
             <ul>
-              <li>287</li>
+              <li>{numPosts}</li>
               <li>Posts</li>
             </ul>
           </div>
           <div className="mx-3">
-            <ul className="justify-center">
+            <ul className="justify-center text-center">
               <li>4</li>
               <li>Followers</li>
             </ul>
           </div>
-          <div className="mx-3">
+          <div className="mx-3 text-center">
             <ul>
               <li>109</li>
               <li>Following</li>
