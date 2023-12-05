@@ -18,11 +18,7 @@ const Profile = () => {
   }, [inView])
 
   const isCurrentUser = user?.$id === currUser?.$id;
-  // console.log(user)
-  // console.log(currUser)
-  // console.log({posts})
-  //const shouldShowPosts = posts?.pages.every((x) => x?.documents.length !== 0)
-  console.log(hasNextPage)
+
   if (isUserPending || isCurrUserPending) return <Loader />
   return (
     <div className="flex flex-col flex-1">
@@ -74,8 +70,6 @@ const Profile = () => {
               <p className='text-light-4 mt-10 text-center w-full'>End of Posts</p>
             ) :
               posts.pages.map((item, index) => {
-                console.log({ user, item })
-
                 return (
 
                   <GridPostList key={`page-${index}`} posts={item?.documents.filter((x) => x.creator.$id === user?.$id)} />

@@ -206,7 +206,6 @@ export const useGetSavedPosts = () => {
             queryFn: getInfiniteSavedPosts,
             initialPageParam: '',
             getNextPageParam: (lastPage, allPages) => {
-                console.log({ lastPage, allPages })
                 if (lastPage && lastPage?.documents.length === 0) return undefined;
 
                 const lastId = lastPage?.documents[lastPage?.documents.length - 1].$id;
