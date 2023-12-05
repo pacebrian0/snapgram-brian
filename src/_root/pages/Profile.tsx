@@ -10,11 +10,11 @@ const Profile = () => {
   if (!id || id === "") return;
   const { data: user, isPending: isUserPending } = useGetUserById(id);
   const { data: currUser, isPending: isCurrUserPending } = useGetCurrentUser();
-  const { data: posts,  hasNextPage, fetchNextPage } = useGetInfinitePosts();
+  const { data: posts, hasNextPage, fetchNextPage } = useGetInfinitePosts();
   const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (inView) fetchNextPage();
+    if (inView && hasNextPage) fetchNextPage();
   }, [inView])
 
   const isCurrentUser = user?.$id === currUser?.$id;
@@ -22,7 +22,7 @@ const Profile = () => {
   // console.log(currUser)
   // console.log({posts})
   //const shouldShowPosts = posts?.pages.every((x) => x?.documents.length !== 0)
-
+  console.log(hasNextPage)
   if (isUserPending || isCurrUserPending) return <Loader />
   return (
     <div className="flex flex-col flex-1">
@@ -57,44 +57,41 @@ const Profile = () => {
           </div>
           <div className="mx-3">
             <ul>
-            <li>109</li>
-            <li>Following</li>
+              <li>109</li>
+              <li>Following</li>
             </ul>
-           
+
           </div>
         </div>
-        
+
       </div>
 
-      {isUserPending ?
-        <Loader />
-        :
-        (
-          <div className="explore-container">
-            <div className='flex flex-wrap gap-9 w-full max-w-5xl'>
-              {
-                !posts ? (
-                  <p className='text-light-4 mt-10 text-center w-full'>End of Posts</p>
-                ) :
-                  posts.pages.map((item, index) => { 
-                    console.log({user,item})
 
-                    return(
-                      
-                    <GridPostList key={`page-${index}`} posts={item?.documents.filter((x) => x.creator.$id === user?.$id).map((x) => x.post)} />
-                  )})
-              }
+      <div className="explore-container">
+        <div className='flex flex-wrap gap-9 w-full max-w-5xl'>
+          {
+            !posts ? (
+              <p className='text-light-4 mt-10 text-center w-full'>End of Posts</p>
+            ) :
+              posts.pages.map((item, index) => {
+                console.log({ user, item })
 
-            </div>
-          </div>
+                return (
 
-        )}
-      {hasNextPage && (
-        <div ref={ref} className='mt-10'>
-          <Loader />
+                  <GridPostList key={`page-${index}`} posts={item?.documents.filter((x) => x.creator.$id === user?.$id)} />
+                )
+              })
+          }
+
         </div>
-      )}
+        {hasNextPage && (
+          <div ref={ref} className='mt-10'>
+            <Loader />
+          </div>
+        )}
+      </div>
     </div>
+
   )
 }
 
