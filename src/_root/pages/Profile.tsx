@@ -1,4 +1,4 @@
-import { useGetCurrentUser, useGetInfinitePosts, useGetUserById } from "@/lib/react-query/queriesAndMutations"
+import { useGetCurrentUser, useGetInfinitePosts, useGetUserById, useGetUserPosts } from "@/lib/react-query/queriesAndMutations"
 import { Link, useParams } from "react-router-dom"
 import Loader from "@/components/shared/Loader";
 import GridPostList from "@/components/shared/GridPostList";
@@ -10,26 +10,22 @@ const Profile = () => {
   if (!id || id === "") return;
   const { data: user, isPending: isUserPending } = useGetUserById(id);
   const { data: currUser, isPending: isCurrUserPending } = useGetCurrentUser();
-  const { data: posts, hasNextPage, fetchNextPage } = useGetInfinitePosts();
+  const { data: posts, isPending:isPostsPending} = useGetUserPosts(user?.$id?? currUser?.$id ?? "");
   const { ref, inView } = useInView();
-
-  useEffect(() => {
-    if (inView && hasNextPage) fetchNextPage();
-  }, [inView])
 
   const isCurrentUser = user?.$id === currUser?.$id;
   // console.log(user)
   // console.log(currUser)
   // console.log({posts})
   //const shouldShowPosts = posts?.pages.every((x) => x?.documents.length !== 0)
-  console.log(hasNextPage)
-  if (isUserPending || isCurrUserPending) return <Loader />
+
+  if (isUserPending || isCurrUserPending || isPostsPending) return <Loader />
   return (
     <div className="flex flex-col flex-1">
-      <div className="flex flex-row mx-10 mt-10">
+      <div className="flex flex-row ml-20 mt-10">
         <img src={user?.imageUrl} width={100} height={100} className="rounded-full max-w-2xl h-fit p-0 " />
         <div className="flex" >
-          <ul className="mx-10 ">
+          <ul className="mx-8 ">
             <li className="h1-semibold bg-gradient-to-r from-[#a44d56] via-[#e2ab9a]  to-[#d87253] bg-clip-text text-transparent animate-text">{user?.name}</li>
             <li className="small-regular text-light-3">@{user?.username}</li>
 
@@ -43,19 +39,19 @@ const Profile = () => {
       </div>
       <div className="flex flex-col">
         <div className='flex flex-row justify-center '>
-          <div className="mx-3 justify-center">
+          <div className="mx-6 justify-center">
             <ul>
               <li>287</li>
               <li>Posts</li>
             </ul>
           </div>
-          <div className="mx-3">
+          <div className="mx-6">
             <ul className="justify-center">
               <li>4</li>
               <li>Followers</li>
             </ul>
           </div>
-          <div className="mx-3">
+          <div className="mx-6">
             <ul>
               <li>109</li>
               <li>Following</li>
@@ -67,14 +63,13 @@ const Profile = () => {
       </div>
 
 
-      <div className="explore-container">
-        <div className='flex flex-wrap gap-9 w-full max-w-5xl'>
+      <div className="explore-container my-8">
+        <div className='flex flex-wrap gap-9 w-full max-w-5xl '>
           {
             !posts ? (
               <p className='text-light-4 mt-10 text-center w-full'>End of Posts</p>
             ) :
               posts.pages.map((item, index) => {
-                console.log({ user, item })
 
                 return (
 

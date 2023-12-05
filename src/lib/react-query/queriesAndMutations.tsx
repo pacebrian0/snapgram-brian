@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteSavedPosts, getPostById, getRecentPosts, getUserById, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost } from "../appwrite/api";
+import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteSavedPosts, getPostById, getRecentPosts, getUserById, getUserPosts, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost } from "../appwrite/api";
 import { INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
 
@@ -161,18 +161,17 @@ export const useGetInfinitePosts = () => {
             initialPageParam: '',
             getNextPageParam: (lastPage) => {
                 // Use the last document's cursor or any logic to determine the next page
-                if(lastPage && lastPage?.documents.length === 0) return undefined;
+                if (lastPage && lastPage?.documents.length === 0) return undefined;
 
-                const lastId = lastPage?.documents[lastPage?.documents.length -1].$id;
+                const lastId = lastPage?.documents[lastPage?.documents.length - 1].$id;
                 return lastId;
-              }
+            }
 
         }
     )
 }
 
-export const useSearchPost = (searchTerm: string) => 
-{
+export const useSearchPost = (searchTerm: string) => {
     return useQuery(
         {
             queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerm],
@@ -186,13 +185,13 @@ export const useGetSavedPosts = () => {
     return useInfiniteQuery(
         {
             queryKey: [QUERY_KEYS.GET_INFINITE_SAVED_POSTS],
-            queryFn:getInfiniteSavedPosts,
+            queryFn: getInfiniteSavedPosts,
             initialPageParam: '',
-            getNextPageParam: (lastPage,allPages) => {
-                console.log({lastPage,allPages})
-                if(lastPage && lastPage?.documents.length === 0) return undefined;
+            getNextPageParam: (lastPage, allPages) => {
+                console.log({ lastPage, allPages })
+                if (lastPage && lastPage?.documents.length === 0) return undefined;
 
-                const lastId = lastPage?.documents[lastPage?.documents.length -1].$id;
+                const lastId = lastPage?.documents[lastPage?.documents.length - 1].$id;
                 return lastId;
 
             }
@@ -200,9 +199,19 @@ export const useGetSavedPosts = () => {
         }
     )
 }
-export const useGetUserById = (userId:string) => {
+export const useGetUserById = (userId: string) => {
     return useQuery({
         queryKey: [QUERY_KEYS.GET_USER_BY_ID],
         queryFn: () => getUserById(userId)
     })
+}
+
+export const useGetUserPosts = (userId: string) => {
+    return useQuery(
+        {
+            queryKey: [QUERY_KEYS.GET_USER_POSTS],
+            queryFn: () => getUserPosts(userId)
+
+        }
+    )
 }

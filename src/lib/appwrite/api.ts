@@ -332,6 +332,24 @@ export async function getInfinitePosts({pageParam}: {pageParam:string}) {
     }
 }
 
+export async function getUserPosts(userId:string) {
+    //const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(2), Query.select(['posts']), Query.equal('accountId', userId)]
+    
+    const queries:any[] = [Query.select(['posts'])]
+    try {
+        const posts = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            userId,
+            queries
+        )
+        if (!posts) throw Error;
+        return posts;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async function searchPosts(searchTerm: string) {
     try {
         const posts = await databases.listDocuments(
