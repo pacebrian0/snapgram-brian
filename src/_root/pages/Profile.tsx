@@ -1,4 +1,4 @@
-import { useGetCurrentUser, useGetInfinitePosts, useGetInfiniteUserPosts, useGetUserById } from "@/lib/react-query/queriesAndMutations"
+import { useGetCurrentUser, useGetInfiniteUserPosts, useGetUserById } from "@/lib/react-query/queriesAndMutations"
 import { Link, useParams } from "react-router-dom"
 import Loader from "@/components/shared/Loader";
 import GridPostList from "@/components/shared/GridPostList";

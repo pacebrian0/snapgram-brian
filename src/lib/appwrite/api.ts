@@ -430,3 +430,37 @@ export async function getUserById(userId:string)
     }
 }
 
+export async function getInfiniteUsers({pageParam}: {pageParam:string}) {
+    const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(2)]
+    if (pageParam && pageParam !=='') {
+        queries.push(Query.cursorAfter(pageParam.toString()))
+    }
+    try {
+        const users = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            queries
+        )
+        if (!users) throw Error;
+        return users;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function userFriends(userId: string, friendsArray: string[]) {
+    try {
+        const updatedPost = await databases.updateDocument(
+            appwriteConfig.databaseId, appwriteConfig.userCollectionId,
+            userId,
+            {
+                friends: friendsArray
+            }
+        )
+        if (!updatedPost) throw Error;
+
+        return updatedPost;
+    } catch (error) {
+        console.log(error);
+    }
+}
