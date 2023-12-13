@@ -17,7 +17,6 @@ const GridPostList = ({ posts, showUser = true, showStats = true }: GridPostList
         <ul className='grid-container'>
             {posts?.map((post) => {
                 if(!post) return;
-                console.log({post});
                 
                 return(
                 
