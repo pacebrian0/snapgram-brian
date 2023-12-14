@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteSavedPosts, getInfiniteUserPosts, getInfiniteUsers, getPostById, getRecentPosts, getUserById, getUserPosts, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost, userFriends } from "../appwrite/api";
+import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteSavedPosts, getInfiniteUserPosts, getInfiniteUsers, getPostById, getRecentPosts, getUserById, getUserPosts, likePost, savePost, searchPosts, signInAccount, signOutAccount, updatePost, userFollowing } from "../appwrite/api";
 import { INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
 
@@ -251,11 +251,11 @@ export const useGetInfiniteUsers = () => {
     )
 }
 
-export const useAddFriend = () => {
+export const useFollow = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ userId, friendsArray }: { userId: string; friendsArray: string[] }) => userFriends(userId, friendsArray),
+        mutationFn: ({ userId, followArray }: { userId: string; followArray: string[] }) => userFollowing(userId, followArray),
         onSuccess: (data) => {
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id]

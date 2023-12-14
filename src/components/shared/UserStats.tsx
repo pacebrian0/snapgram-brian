@@ -1,7 +1,7 @@
 import { Models } from "appwrite";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { useAddFriend } from "@/lib/react-query/queriesAndMutations";
+import { useFollow } from "@/lib/react-query/queriesAndMutations";
 import Loader from "./Loader";
 
 type UserStatsProps = {
@@ -12,31 +12,31 @@ type UserStatsProps = {
 
 const UserStats = ({ user, currUser, setUser }: UserStatsProps) => {
     if (!user || !currUser) return null;
-    const friendsList:string[]= currUser.friends;
+    const followList:string[]= currUser.following;
 
-    const [isFriends, setIsFriends] = useState(friendsList?.includes(user.$id));
-    const { mutate: addFriend, isPending: isAdding } = useAddFriend();
+    const [isFollowing, setIsFollowing] = useState(followList?.includes(user.$id));
+    const { mutate: follow, isPending: isAddingFollow } = useFollow();
 
     useEffect(() => {
-        setIsFriends(() => {
-            const friendedUser = friendsList?.includes(user.$id);
-            return !!friendedUser;
+        setIsFollowing(() => {
+            const followedUser = followList?.includes(user.$id);
+            return !!followedUser;
         });
     }, [currUser]);
 
-    const handleFriends = (e: React.MouseEvent) => {
+    const handleFollowing = (e: React.MouseEvent) => {
         e.stopPropagation();
-        const hasFriended = isFriends;
-        const newFriendsList = hasFriended
-            ? (friendsList || []).filter((id) => id !== user.$id)
-            : [...(friendsList || []), user.$id];
+        const hasFollowed = isFollowing;
+        const newFollowList = hasFollowed
+            ? (followList || []).filter((id) => id !== user.$id)
+            : [...(followList || []), user.$id];
 
-        addFriend({ userId: currUser?.$id ?? '', friendsArray: newFriendsList });
-        setIsFriends(!hasFriended);
+        follow({ userId: currUser?.$id ?? '', followArray: newFollowList });
+        setIsFollowing(!hasFollowed);
 
         setUser((currUser: any) => ({
             ...currUser,
-            friends: newFriendsList
+            following: newFollowList
         }));
 
     };
@@ -44,14 +44,14 @@ const UserStats = ({ user, currUser, setUser }: UserStatsProps) => {
     return (
         <div className="flex justify-center z-20">
             <div className="flex ">
-                {isAdding ? (
+                {isAddingFollow ? (
                     <Loader />
-                ) : !isFriends ? (
-                    <Button className="cursor-pointer hover:scale-105" onClick={handleFriends}>
+                ) : !isFollowing ? (
+                    <Button className="cursor-pointer hover:scale-105" onClick={handleFollowing}>
                         Follow
                     </Button>
                 ) : (
-                    <Button className="cursor-pointer hover:scale-105" onClick={handleFriends}>
+                    <Button className="cursor-pointer hover:scale-105" onClick={handleFollowing}>
                         Unfollow
                     </Button>
                 )}
