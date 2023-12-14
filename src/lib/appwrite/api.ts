@@ -448,13 +448,13 @@ export async function getInfiniteUsers({pageParam}: {pageParam:string}) {
     }
 }
 
-export async function userFriends(userId: string, friendsArray: string[]) {
+export async function userFollowing(userId: string, followingArray: string[]) {
     try {
         const updatedPost = await databases.updateDocument(
             appwriteConfig.databaseId, appwriteConfig.userCollectionId,
             userId,
             {
-                friends: friendsArray
+                following: followingArray
             }
         )
         if (!updatedPost) throw Error;
