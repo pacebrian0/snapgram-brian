@@ -464,3 +464,20 @@ export async function userFollowing(userId: string, followingArray: string[]) {
         console.log(error);
     }
 }
+
+export async function userFollowedBy(userId: string, followedArray: string[]) {
+    try {
+        const updatedPost = await databases.updateDocument(
+            appwriteConfig.databaseId, appwriteConfig.userCollectionId,
+            userId,
+            {
+                followedby: followedArray
+            }
+        )
+        if (!updatedPost) throw Error;
+
+        return updatedPost;
+    } catch (error) {
+        console.log(error);
+    }
+}
