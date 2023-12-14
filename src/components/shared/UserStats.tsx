@@ -13,9 +13,10 @@ type UserStatsProps = {
 const UserStats = ({ user, currUser, setUser }: UserStatsProps) => {
     if (!user || !currUser) return null;
     const followList:string[]= currUser.following;
-
+    const followedList:string[]= user.followedby;
+    
     const [isFollowing, setIsFollowing] = useState(followList?.includes(user.$id));
-    const { mutate: follow, isPending: isAddingFollow } = useFollow();
+    const { mutate: updateFollow, isPending: isAddingFollow } = useFollow();
 
     useEffect(() => {
         setIsFollowing(() => {
@@ -31,7 +32,11 @@ const UserStats = ({ user, currUser, setUser }: UserStatsProps) => {
             ? (followList || []).filter((id) => id !== user.$id)
             : [...(followList || []), user.$id];
 
-        follow({ userId: currUser?.$id ?? '', followArray: newFollowList });
+        const newFollowedList = hasFollowed
+        ? (followedList || []).filter((id) => id !== user.$id)
+        : [...(followedList || []), user.$id];
+
+        updateFollow({ userId: currUser?.$id ?? '', followArray: newFollowList });
         setIsFollowing(!hasFollowed);
 
         setUser((currUser: any) => ({
