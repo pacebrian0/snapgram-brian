@@ -1,7 +1,7 @@
 import { Models } from "appwrite";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { useFollow } from "@/lib/react-query/queriesAndMutations";
+import { useFollow, useFollowedBy } from "@/lib/react-query/queriesAndMutations";
 import Loader from "./Loader";
 
 type UserStatsProps = {
@@ -17,6 +17,7 @@ const UserStats = ({ user, currUser, setUser }: UserStatsProps) => {
     
     const [isFollowing, setIsFollowing] = useState(followList?.includes(user.$id));
     const { mutate: updateFollow, isPending: isAddingFollow } = useFollow();
+    const { mutate: updateFollowed } = useFollowedBy();
 
     useEffect(() => {
         setIsFollowing(() => {
@@ -37,6 +38,8 @@ const UserStats = ({ user, currUser, setUser }: UserStatsProps) => {
         : [...(followedList || []), user.$id];
 
         updateFollow({ userId: currUser?.$id ?? '', followArray: newFollowList });
+        updateFollowed({ userId: user?.$id ?? '', followedArray: newFollowedList });
+
         setIsFollowing(!hasFollowed);
 
         setUser((currUser: any) => ({
