@@ -1,4 +1,4 @@
-import { INewPost, INewUser, IUpdatePost } from "@/types";
+import { INewPost, INewUser, IUpdatePost, IUpdateProfile } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { ID, Query } from "appwrite";
 
@@ -477,6 +477,59 @@ export async function userFollowedBy(userId: string, followedArray: string[]) {
         if (!updatedPost) throw Error;
 
         return updatedPost;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function updateProfile(profile: IUpdateProfile) {
+    try {
+        const hasFileToUpdate = profile.file.length > 0;
+
+
+        let image = {
+            imageUrl: profile.imageUrl,
+            imageId: profile.imageId
+        }
+
+
+
+        if (hasFileToUpdate) {
+            // Upload file to appwrite storage
+            const uploadedFile = await uploadFile(profile.file[0]);
+
+            if (!uploadedFile) throw Error;
+            // Get file url
+            const fileUrl = getFilePreview(uploadedFile.$id);
+            if (!fileUrl) {
+                await deleteFile(uploadedFile.$id);
+                throw Error;
+            }
+
+            image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id }
+        }
+
+
+        // Create
+        const updatedProfile = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            profile.userId,
+            {
+                name: profile.name,
+                username: profile.username,
+                imageUrl: image.imageUrl,
+                imageId: image.imageId,
+                bio: profile.bio,
+            }
+        );
+
+        if (!updatedProfile) {
+            await deleteFile(profile.imageId);
+            throw Error;
+        }
+
+        return updatedProfile;
     } catch (error) {
         console.log(error);
     }

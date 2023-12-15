@@ -22,7 +22,6 @@ const Profile = () => {
   const numPosts = posts?.pages.length;
   const numFollowing = user?.following.length;
   const numFollowed = user?.followedby.length;
-
   if (isUserPending || isCurrUserPending) return <Loader />
   return (
     <div className="flex flex-col flex-1">
@@ -35,7 +34,7 @@ const Profile = () => {
 
           </ul>
 
-          <Link to={`/edit-profile/${user?.$id}`} className={`${isCurrentUser && "hidden"} `}>
+          <Link to={`/update-profile/${user?.$id}`} className={`${!isCurrentUser && "hidden"} `}>
             <img src='/assets/icons/edit.svg' alt='edit' width={20} height={20} />
           </Link>
 
