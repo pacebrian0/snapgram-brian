@@ -57,3 +57,14 @@ export type INavLink = {
     username: string;
     password: string;
   };
+
+    
+  export type IUpdateProfile = {
+    userId: string;
+    name: string;
+    username: string;
+    imageId: string;
+    imageUrl: URL;
+    file: File[];
+    bio?: string;
+  };
